@@ -1,82 +1,113 @@
 package com.example.asharshoaib.addressbook.Models;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
+import java.util.Comparator;
+
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.Required;
 
 /**
  * Created by asharshoaib on 2016-10-14.
  */
 
-public class Contact {
+public class Contact extends RealmObject implements Comparator<Contact>, Comparable<Contact>{
+    @SerializedName("id")
+    @Expose
+    public Id id;
 
-    public String id;
-    public String name;
-    public ArrayList<ContactEmail> emails;
-    public ArrayList<ContactPhone> numbers;
+    @SerializedName("name")
+    @Expose
+    public Name name;
 
-    public Contact(String id, String name) {
+    @SerializedName("email")
+    @Expose
+    public String emails;
+
+    @SerializedName("cell")
+    @Expose
+    @PrimaryKey
+    public String numbers;
+
+    @SerializedName("picture")
+    @Expose
+    private Picture picture;
+
+    public Contact(Id id, Name name) {
         this.id = id;
         this.name = name;
-        this.emails = new ArrayList<ContactEmail>();
-        this.numbers = new ArrayList<ContactPhone>();
     }
-
-    public void addEmail(String address, String type){
-        emails.add(new ContractEmail(address, type));
+    public Contact() {
     }
-
-    public void addNumber(String number, String type){
-        numbers.add(new ContactPhone(number, type));
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
+    public Contact(Id id, Name name, String emails, String numbers, Picture picture) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
         this.name = name;
-    }
-
-    public ArrayList<ContactEmail> getEmails() {
-        return emails;
-    }
-
-    public void setEmails(ArrayList<ContactEmail> emails) {
         this.emails = emails;
-    }
-
-    public ArrayList<ContactPhone> getNumber() {
-        return numbers;
-    }
-
-    public void setNumber(ArrayList<ContactPhone> number) {
-        this.numbers = number;
+        this.numbers = numbers;
+        this.picture = picture;
     }
 
     @Override
     public String toString() {
         return "Contact{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", emails=" + emails +
-                ", numbesr=" + numbers +
+                "id=" + id +
+                ", name=" + name +
+                ", emails='" + emails + '\'' +
+                ", numbers='" + numbers + '\'' +
+                ", picture=" + picture +
                 '}';
     }
-    private static int lastContactId = 0;
-    public static ArrayList<Contact> createContactsList(int numContacts) {
-        ArrayList<Contact> contacts = new ArrayList<Contact>();
 
-        for (int i = 1; i <= numContacts; i++) {
-            contacts.add(new Contact("Person " + ++lastContactId, "test"));
-        }
+    public Id getId() {
+        return id;
+    }
 
-        return contacts;
+    public void setId(Id id) {
+        this.id = id;
+    }
+
+    public Name getName() {
+        return name;
+    }
+
+    public void setName(Name name) {
+        this.name = name;
+    }
+
+    public String getEmails() {
+        return emails;
+    }
+
+    public void setEmails(String emails) {
+        this.emails = emails;
+    }
+
+    public String getNumbers() {
+        return numbers;
+    }
+
+    public void setNumbers(String numbers) {
+        this.numbers = numbers;
+    }
+
+    public Picture getPicture() {
+        return picture;
+    }
+
+    public void setPicture(Picture picture) {
+        this.picture = picture;
+    }
+
+    @Override
+    public int compareTo(Contact o) {
+        return (this.name.getLast()).compareTo(o.getName().getLast());
+    }
+
+    @Override
+    public int compare(Contact o1, Contact o2) {
+        return (o1.name.getLast()).compareTo(o2.getName().getLast());
     }
 }

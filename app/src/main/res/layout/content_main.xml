@@ -10,13 +10,22 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.asharshoaib.addressbook.MainActivity"
+    tools:context="com.example.asharshoaib.addressbook.Activities.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvContacts"
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/rvContacts"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
+
+    <co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView
+        android:id="@+id/realm_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:rrvIsRefreshable="false"
+        app:rrvLayoutType="Grid"
+        app:rrvGridLayoutSpanCount="1"
+        />
 
     <!--<TextView-->
         <!--android:layout_width="wrap_content"-->

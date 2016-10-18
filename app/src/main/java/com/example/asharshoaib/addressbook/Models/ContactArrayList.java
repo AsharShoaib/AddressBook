@@ -1,12 +1,18 @@
 package com.example.asharshoaib.addressbook.Models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
+
+import io.realm.RealmList;
+import io.realm.RealmObject;
 
 /**
  * Created by asharshoaib on 2016-10-17.
  */
-public class ContactArrayList {
-    public List<Contact> contactList;
+public class ContactArrayList extends RealmObject{
+    @SerializedName("results")
+    public RealmList<Contact> contactList;
 
     @Override
     public String toString() {
@@ -26,12 +32,15 @@ public class ContactArrayList {
         return contactList;
     }
 
-    public void setContactList(List<Contact> contactList) {
+    public void setContactList(RealmList<Contact> contactList) {
         this.contactList = contactList;
     }
 
-    public ContactArrayList(List<Contact> contactList) {
+    public ContactArrayList(RealmList<Contact> contactList) {
 
         this.contactList = contactList;
+    }
+    public ContactArrayList() {
+
     }
 }

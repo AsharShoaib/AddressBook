@@ -40,7 +40,7 @@ public class ContactDiffUtill extends DiffUtil.Callback {
         Contact oldContact = mOldList.get(oldItemPosition);
         Contact newContact = mNewList.get(newItemPosition);
 
-        if (oldContact.getName() == newContact.getName() && oldContact.getNumber() == newContact.getNumber()) {
+        if (oldContact.getName().getFirst() == newContact.getName().getFirst() && oldContact.getName().getLast() == newContact.getName().getLast() && oldContact.getNumbers() == newContact.getNumbers()) {
             return true;
         }
         return false;

@@ -7,77 +7,78 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.example.asharshoaib.addressbook.Activities.MainActivity;
 import com.example.asharshoaib.addressbook.Models.Contact;
+import com.example.asharshoaib.addressbook.Models.Picture;
 
 import java.util.List;
+
+import io.realm.RealmBasedRecyclerViewAdapter;
+import io.realm.RealmList;
+import io.realm.RealmResults;
+import io.realm.RealmViewHolder;
 
 /**
  * Created by asharshoaib on 2016-10-14.
  */
 
-public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecyclerViewAdapter.ViewHolder> {
+public class ContactRecyclerViewAdapter extends RealmBasedRecyclerViewAdapter<Contact, ContactRecyclerViewAdapter.ViewHolder> {
 
-    private List<Contact> mContacts;
-    private Context mContext;
+    public interface OnItemClickListener {
+        void onItemClick(Contact item);
+    }
 
-    public ContactRecyclerViewAdapter(List<Contact> mContacts, Context mContext) {
-        this.mContacts = mContacts;
-        this.mContext = mContext;
+    public ContactRecyclerViewAdapter(RealmResults<Contact> mContacts, Context mContext, boolean automaticUpdate, boolean animateIdType) {
+        super(mContext, mContacts, automaticUpdate, animateIdType);
     }
 
     @Override
-    public ContactRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
-        LayoutInflater inflater = LayoutInflater.from(context);
-
-        View contactView = inflater.inflate(R.layout.item_contact_card, parent, false);
-
-        ViewHolder viewHolder = new ViewHolder(contactView);
-        return viewHolder;
+    public ViewHolder onCreateRealmViewHolder(ViewGroup viewGroup, int viewType) {
+        View v = inflater.inflate(R.layout.item_contact_card, viewGroup, false);
+        ViewHolder vh = new ViewHolder((LinearLayout) v);
+        return vh;
     }
 
     @Override
-    public void onBindViewHolder(ContactRecyclerViewAdapter.ViewHolder holder, int position) {
-
-        Contact contact = mContacts.get(position);
-
-        TextView textView = holder.nameTextView;
-        textView.setText(contact.getName());
-        Button button = holder.messageButton;
-        button.setText("Message");
+    public void onBindRealmViewHolder(ViewHolder viewHolder, int position) {
+        final Contact contact = realmResults.get(position);
+        final Picture picture = contact.getPicture();
+        TextView nametextView = viewHolder.nameTextView;
+        nametextView.setText(contact.getName().getFirst() + " " + contact.getName().getLast());
+        TextView numbertextView = viewHolder.numberTextView;
+        numbertextView.setText(contact.getNumbers());
+        TextView emailtextView = viewHolder.emailTextView;
+        emailtextView.setText(contact.getEmails());
+        if (picture != null) {
+            Glide.with(getContext())
+                    .load(picture.getMedium())
+                    .override(100,100)
+                    .into(viewHolder.image);
+        } else {
+            viewHolder.image.setImageResource(R.drawable.placeholder);
+        }
     }
 
-    @Override
-    public int getItemCount() {
-        return mContacts.size();
-    }
 
-    public Context getmContext() {
-        return mContext;
-    }
-
-    public static class ViewHolder extends  RecyclerView.ViewHolder {
+    public static class ViewHolder extends RealmViewHolder {
 
         private final TextView nameTextView;
-        private final Button messageButton;
+        private final ImageView image;
+        private final TextView numberTextView;
+        private final TextView emailTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             nameTextView = (TextView) itemView.findViewById(R.id.contact_name);
-            messageButton = (Button) itemView.findViewById(R.id.message_button);
+            numberTextView = (TextView) itemView.findViewById(R.id.contact_number);
+            emailTextView = (TextView) itemView.findViewById(R.id.contact_email);
+            this.image = (ImageView) itemView.findViewById(R.id.image);
         }
     }
 
-    public void swapItems(List<Contact> contacts) {
-
-        final ContactDiffUtill diffCallback = new ContactDiffUtill(this.mContacts, contacts);
-        final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
-
-        this.mContacts.clear();
-        this.mContacts.addAll(contacts);
-
-        diffResult.dispatchUpdatesTo(this);
-    }
 }

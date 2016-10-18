@@ -5,13 +5,14 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
+        android:name="com.example.asharshoaib.addressbook.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".Activities.SplashActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -20,6 +21,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"  />
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.example.asharshoaib.addressbook;
+package com.example.asharshoaib.addressbook.Activities;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,15 +13,23 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.asharshoaib.addressbook.ContactRecyclerViewAdapter;
 import com.example.asharshoaib.addressbook.Models.Contact;
 import com.example.asharshoaib.addressbook.Models.ContactArrayList;
+import com.example.asharshoaib.addressbook.OkHttpApiCall;
+import com.example.asharshoaib.addressbook.R;
 import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
+import co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView;
+import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 import okhttp3.OkHttpClient;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
     private OkHttpClient client;
     private String response;
     private ContactArrayList contactList;
+    private Realm realm;
+    private RealmRecyclerView realmRecyclerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -40,8 +51,9 @@ public class MainActivity extends AppCompatActivity {
         //Need to add a splash screen activity to do initial download
         //After initial launch downloads will be done in background (possible syncing indication)
         // and updated in real-time
-        client = new OkHttpClient();
+        Realm realm = Realm.getDefaultInstance();
 
+        RealmResults<Contact> contactsResult = realm.where(Contact.class).findAll();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,17 +63,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        RecyclerView rvContacts = (RecyclerView) findViewById(R.id.rvContacts);
-        loadContent();
+        realmRecyclerView = (RealmRecyclerView) findViewById(R.id.realm_recycler_view);
+        ContactRecyclerViewAdapter adapter = new ContactRecyclerViewAdapter(contactsResult, this, true, true);
+        realmRecyclerView.setAdapter(adapter);
 
-        //Need to feed actual data pulled
-        contacts = Contact.createContactsList(20);
-
-        ContactRecyclerViewAdapter adapter = new ContactRecyclerViewAdapter(contacts, this);
-        rvContacts.setAdapter(adapter);
-        rvContacts.setHasFixedSize(true);
-        rvContacts.setItemAnimator(new SlideInUpAnimator());
-        rvContacts.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
@@ -84,25 +89,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void loadContent() {
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                try {
-                    response = OkHttpApiCall.GET(client, OkHttpApiCall.RequestBuilder.buildURL());
-                    Gson gson = new Gson();
-
-                    //Need to confirm data parsing currently
-                    contactList = gson.fromJson(response, ContactArrayList.class);
-                    Log.d("Response", response);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-        }.execute();
     }
 
 }

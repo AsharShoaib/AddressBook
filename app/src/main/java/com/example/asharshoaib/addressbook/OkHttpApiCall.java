@@ -25,10 +25,10 @@ public class OkHttpApiCall {
 
         public static HttpUrl buildURL() {
             return new HttpUrl.Builder()
-                    .scheme("https")
+                    .scheme("http")
                     .host("api.randomuser.me")
                     .addPathSegment("")
-                    .addQueryParameter("results", "50")
+                    .addQueryParameter("results", "3")
                     .build();
         }
     }
