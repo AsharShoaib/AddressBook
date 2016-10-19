@@ -1,4 +1,14 @@
 <resources>
     <string name="app_name">Address Book</string>
     <string name="action_settings">Settings</string>
+
+    <string name="input">Input</string>
+    <string name="input_custominvalidation">Input (Custom Invalidation)</string>
+    <string name="input_hint">John Appleseed</string>
+    <string name="input_content">What\'s your name?</string>
+    <string name="input_content_custominvalidation">Do not type hello, or else!</string>
+    <string name="input_checkPrompt">Input (CheckBox Prompt)</string>
+    <string name="input_prefill">John</string>
+    <string name="add_contact">Add a contact</string>
+
 </resources>

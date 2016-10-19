@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        style="@style/SampleHeader"
+        android:text="@string/input" />
+
+    <Button
+        android:id="@+id/input"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sample_button_height"
+        android:layout_marginTop="@dimen/sample_button_spacing"
+        android:text="@string/input" />
+
+    <Button
+        android:id="@+id/input_custominvalidation"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sample_button_height"
+        android:layout_marginTop="@dimen/sample_button_spacing"
+        android:text="@string/input_custominvalidation" />
+
+    <Button
+        android:id="@+id/input_checkPrompt"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sample_button_height"
+        android:layout_marginTop="@dimen/sample_button_spacing"
+        android:text="@string/input_checkPrompt" />
+</LinearLayout>

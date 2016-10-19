@@ -25,6 +25,13 @@ public class Name extends RealmObject {
     @Required
     private String last;
 
+    public Name(String first, String last) {
+        this.first = first;
+        this.last = last;
+    }
+    public Name() {
+    }
+
 
     public String getTitle() {
         return title;

@@ -36,11 +36,17 @@ public class Contact extends RealmObject implements Comparator<Contact>, Compara
     @Expose
     private Picture picture;
 
+    public Contact() {
+    }
     public Contact(Id id, Name name) {
         this.id = id;
         this.name = name;
     }
-    public Contact() {
+    public Contact(String firstname, String lastname, String emailaddress, String phonenumber) {
+        this.id = new Id(Id.getRandomString(5));
+        this.name = new Name(firstname, lastname);
+        this.emails = emails;
+        this.numbers = numbers;
     }
     public Contact(Id id, Name name, String emails, String numbers, Picture picture) {
         this.id = id;

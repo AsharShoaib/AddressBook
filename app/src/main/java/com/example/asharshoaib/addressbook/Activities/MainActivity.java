@@ -1,33 +1,32 @@
 package com.example.asharshoaib.addressbook.Activities;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.asharshoaib.addressbook.ContactRecyclerViewAdapter;
 import com.example.asharshoaib.addressbook.Models.Contact;
 import com.example.asharshoaib.addressbook.Models.ContactArrayList;
+import com.example.asharshoaib.addressbook.MultiInputMaterialDialogBuilder;
 import com.example.asharshoaib.addressbook.OkHttpApiCall;
 import com.example.asharshoaib.addressbook.R;
 import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView;
 import io.realm.Realm;
-import io.realm.RealmQuery;
 import io.realm.RealmResults;
-import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 import okhttp3.OkHttpClient;
 
 
@@ -58,8 +57,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                addNewContact();
             }
         });
 
@@ -68,6 +66,76 @@ public class MainActivity extends AppCompatActivity {
         realmRecyclerView.setAdapter(adapter);
 
     }
+
+    private void addNewContact() {
+
+        new MultiInputMaterialDialogBuilder(this)
+                .addInput(InputType.TYPE_TEXT_VARIATION_PERSON_NAME, null, "First Name", new MultiInputMaterialDialogBuilder.InputValidator() {
+                    @Override
+                    public CharSequence validate(CharSequence input) {
+                        if (input.length() < 0) {
+                            return "First Name cannot be empty";
+                        }
+                        return null;
+                    }
+                })
+                .addInput(InputType.TYPE_TEXT_VARIATION_PERSON_NAME, null, "Last Name", new MultiInputMaterialDialogBuilder.InputValidator() {
+                    @Override
+                    public CharSequence validate(CharSequence input) {
+                        if (input.length() < 0) {
+                            return "Last Name cannot be empty";
+                        }
+                        return null;
+                    }
+                })
+                .addInput(InputType.TYPE_CLASS_PHONE, null, "Phone Number", new MultiInputMaterialDialogBuilder.InputValidator() {
+                    @Override
+                    public CharSequence validate(CharSequence input) {
+                        if (input.length() > 0 && android.util.Patterns.PHONE.matcher(input).matches()) {
+                            return null;
+                        } else {
+                            return "Enter a valid phone number";
+                        }
+                    }
+                })
+                .addInput(InputType.TYPE_CLASS_PHONE, null, "Email", new MultiInputMaterialDialogBuilder.InputValidator() {
+                    @Override
+                    public CharSequence validate(CharSequence input) {
+                        if (!TextUtils.isEmpty(input)) {
+                            if (android.util.Patterns.EMAIL_ADDRESS.matcher(input).matches()) {
+                                return null;
+                            } else {
+                                return "Must be a valid Email Address";
+                            }
+                        }
+                        return null;
+                    }
+                })
+                .inputs(new MultiInputMaterialDialogBuilder.InputsCallback() {
+                    @Override
+                    public void onInputs(MaterialDialog dialog, List<CharSequence> inputs, boolean allInputsValidated) {
+                        String firstname = inputs.get(0).toString();
+                        String lastname = inputs.get(1).toString();
+                        String emailaddress = inputs.get(2).toString();
+                        String phonenumber = inputs.get(3).toString();
+                        try {
+                            Contact c = new Contact(firstname, lastname, emailaddress,phonenumber);
+
+                            // Move realm operations outside of this call back and persist data
+                            realm.beginTransaction();
+                            realm.insert(c);
+                            realm.commitTransaction();
+                        }finally {
+                            realm.close();
+                        }
+                    }
+                })
+                .title(R.string.add_contact)
+                .positiveText("Confirm")
+                .negativeText("Cancel")
+                .show();
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
