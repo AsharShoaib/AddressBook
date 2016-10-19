@@ -1,29 +1,19 @@
 package com.example.asharshoaib.addressbook;
 
 import android.content.Context;
-import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
-import android.text.InputType;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.example.asharshoaib.addressbook.Activities.MainActivity;
 import com.example.asharshoaib.addressbook.Models.Contact;
 import com.example.asharshoaib.addressbook.Models.Picture;
 
-import java.util.List;
-
 import io.realm.RealmBasedRecyclerViewAdapter;
-import io.realm.RealmList;
 import io.realm.RealmResults;
 import io.realm.RealmViewHolder;
 

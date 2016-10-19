@@ -8,11 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.Patterns;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -20,11 +19,8 @@ import com.example.asharshoaib.addressbook.ContactRecyclerViewAdapter;
 import com.example.asharshoaib.addressbook.Models.Contact;
 import com.example.asharshoaib.addressbook.Models.ContactArrayList;
 import com.example.asharshoaib.addressbook.MultiInputMaterialDialogBuilder;
-import com.example.asharshoaib.addressbook.OkHttpApiCall;
 import com.example.asharshoaib.addressbook.R;
-import com.google.gson.Gson;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,10 +47,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        //Need to add a splash screen activity to do initial download
-        //After initial launch downloads will be done in background (possible syncing indication)
-        // and updated in real-time
         realm = Realm.getDefaultInstance();
 
         RealmResults<Contact> contactsResult = realm.where(Contact.class).findAll();
@@ -107,13 +99,13 @@ public class MainActivity extends AppCompatActivity {
                 .addInput(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS, null, "Email", new MultiInputMaterialDialogBuilder.InputValidator() {
                     @Override
                     public CharSequence validate(CharSequence input) {
-                        if (!TextUtils.isEmpty(input)) {
-                            if (android.util.Patterns.EMAIL_ADDRESS.matcher(input).matches()) {
-                                return null;
-                            } else {
-                                return "Must be a valid Email Address";
-                            }
-                        }
+//                        if (!TextUtils.isEmpty(input)) {
+//                            if (android.util.Patterns.EMAIL_ADDRESS.matcher(input).matches()) {
+//                                return null;
+//                            } else {
+//                                return "Must be a valid Email Address";
+//                            }
+//                        }
                         return null;
                     }
                 })
@@ -178,18 +170,11 @@ public class MainActivity extends AppCompatActivity {
                 .addInput(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS, contact.getEmails(), "Email", new MultiInputMaterialDialogBuilder.InputValidator() {
                     @Override
                     public CharSequence validate(CharSequence input) {
-//                        if (!TextUtils.isEmpty(input)) {
-//                            if (Patterns.EMAIL_ADDRESS.matcher(input).matches()) {
-//                                return null;
-//                            } else {
-//                                return "Must be a valid Email Address";
-//                            }
-//                        }
                         return null;
                     }
                 })
                 .inputs(new MultiInputMaterialDialogBuilder.InputsCallback() {
-                    public Realm realm;
+                    Realm realm;
 
                     @Override
                     public void onInputs(MaterialDialog dialog, List<CharSequence> inputs, boolean allInputsValidated) {

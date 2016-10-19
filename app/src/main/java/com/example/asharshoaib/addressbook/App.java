@@ -2,7 +2,6 @@ package com.example.asharshoaib.addressbook;
 
 import android.app.Application;
 
-import com.example.asharshoaib.addressbook.Models.Contact;
 import com.example.asharshoaib.addressbook.Models.ContactModule;
 
 import io.realm.Realm;

@@ -10,7 +10,6 @@ package com.example.asharshoaib.addressbook;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.widget.EditText;
 import android.widget.LinearLayout;
