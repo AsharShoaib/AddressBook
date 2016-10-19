@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
 
@@ -36,17 +37,21 @@ public class Contact extends RealmObject implements Comparator<Contact>, Compara
     @Expose
     private Picture picture;
 
+    private String sortingName;
+
     public Contact() {
     }
     public Contact(Id id, Name name) {
         this.id = id;
         this.name = name;
+        sortingName = this.name.getLast();
     }
     public Contact(String firstname, String lastname, String emailaddress, String phonenumber) {
         this.id = new Id(Id.getRandomString(5));
         this.name = new Name(firstname, lastname);
-        this.emails = emails;
-        this.numbers = numbers;
+        this.emails = emailaddress;
+        this.numbers = phonenumber;
+        sortingName = this.name.getLast();
     }
     public Contact(Id id, Name name, String emails, String numbers, Picture picture) {
         this.id = id;
@@ -54,6 +59,7 @@ public class Contact extends RealmObject implements Comparator<Contact>, Compara
         this.emails = emails;
         this.numbers = numbers;
         this.picture = picture;
+        sortingName = this.name.getLast();
     }
 
     @Override
@@ -81,6 +87,7 @@ public class Contact extends RealmObject implements Comparator<Contact>, Compara
 
     public void setName(Name name) {
         this.name = name;
+        sortingName = this.name.getLast();
     }
 
     public String getEmails() {
@@ -105,6 +112,14 @@ public class Contact extends RealmObject implements Comparator<Contact>, Compara
 
     public void setPicture(Picture picture) {
         this.picture = picture;
+    }
+
+    public String getSortingName() {
+        return sortingName;
+    }
+
+    public void setSortingName(String sortingName) {
+        this.sortingName = sortingName;
     }
 
     @Override

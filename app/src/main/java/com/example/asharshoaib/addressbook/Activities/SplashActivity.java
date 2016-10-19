@@ -21,7 +21,7 @@ import okhttp3.OkHttpClient;
  * Created by asharshoaib on 2016-10-17.
  */
 
-public class SplashActivity extends AppCompatActivity{
+public class SplashActivity extends AppCompatActivity {
 
     public ArrayList<Contact> contacts;
     private OkHttpClient client;
@@ -48,14 +48,16 @@ public class SplashActivity extends AppCompatActivity{
                     //Need to confirm data parsing currently
                     contactList = gson.fromJson(response, ContactArrayList.class);
                     realm.beginTransaction();
-                    for(Contact c: contactList.getContactList()) {
+                    for (Contact c : contactList.getContactList()) {
+                        c.setSortingName(c.getName().getLast());
+
                         realm.insert(c);
                     }
                     realm.commitTransaction();
                     Log.d("Response", response);
                 } catch (IOException e) {
                     e.printStackTrace();
-                }finally {
+                } finally {
                     realm.close();
                 }
 
